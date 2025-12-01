@@ -8,13 +8,24 @@ const expenseRoutes = require("../routes/expenseRoutes");
 const taskRoutes = require("../routes/taskRoutes");
 const profileRoutes = require("../routes/profileRoutes");
 const authRoutes = require("../routes/authRoutes");
+const transactionRoutes = require("../routes/transactionRoutes");
 
 dotenv.config();
 
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",        // local dev
+      "https://spendio-app.vercel.app", // your deployed frontend
+    ],
+    methods: "GET,POST,PUT,DELETE,PATCH,OPTIONS",
+    allowedHeaders: "Content-Type, Authorization",
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -36,7 +47,10 @@ app.use("/api/auth", authRoutes);
 app.use("/api/income", incomeRoutes);
 app.use("/api/expense", expenseRoutes);
 app.use("/api/task", taskRoutes);
-app.use("/api/profile", profileRoutes); 
+app.use("/api/profile", profileRoutes);
+app.use("/api/transactions", transactionRoutes);
+
+console.log("✅ All routes registered, including /api/transactions"); 
 
 
 // Test route
